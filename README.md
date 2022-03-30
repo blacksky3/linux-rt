@@ -1,6 +1,6 @@
 # linux-rt
 
-Linux kernel build for Archlinux with Real-Time support, Arch, Block, CPU, CPU Power and kernel_compiler_patch patch.
+Linux kernel build for Archlinux with Real-Time support, Arch, Block, CPU, CPU Power, Futex and kernel_compiler_patch patch.
 
 # Version
 
