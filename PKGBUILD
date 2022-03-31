@@ -53,8 +53,9 @@ for _p in "${pkgname[@]}"; do
     _package${_p#$pkgbase}
   }"
 done
-pkgver=5.17_rt15
-kernelversion=5.17
+pkgver=5.17.1_rt16
+kernelversion=5.17.1
+rtversion=16
 pkgrel=1
 major=5.17
 arch=(x86_64)
@@ -66,13 +67,13 @@ if [[ "$_compiler" = "2" ]]; then
 fi
 options=(!strip)
 
-archlinuxpath=https://raw.githubusercontent.com/archlinux/svntogit-packages/7f98cfac6f93f0c57b930d42da2f95e77076fbc4/trunk
+archlinuxpath=https://raw.githubusercontent.com/archlinux/svntogit-packages/0bbf02b31459152f9ca46984fb823537211031ca/trunk
 patchpath=https://raw.githubusercontent.com/blacksky3/patches/main/$major
 
 source=(https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-$kernelversion.tar.xz
         ${archlinuxpath}/config
         # RT patch
-        ${patchpath}/rt/patch-5.17-rt15.patch
+        ${patchpath}/rt/patch-$kernelversion-rt$rtversion.patch
         # Arch patches
         ${patchpath}/arch/0001-ZEN-Add-sysctl-and-CONFIG-to-disallow-unprivileged-C.patch
         ${patchpath}/arch/0002-random-treat-bootloader-trust-toggle-the-same-way-as.patch
@@ -533,9 +534,9 @@ _package-headers(){
   ln -sr "$builddir" "$pkgdir/usr/src/$pkgbase"
 }
 
-sha256sums=('555fef61dddb591a83d62dd04e252792f9af4ba9ef14683f64840e46fa20b1b1'
-            '05381b085c83737922a85fa6f42aa61b3d1400840a7952bf8524726e1d8f74f8'
-            '086f9f5796c60d0d964bf60fb1c5c3a47c26a9497d4a3e269a3b5458ca3bc216'
+sha256sums=('7cd5c5d432a25f45060868ce6a8578890e550158a2f779c4a20804b551e84c24'
+            'c05ff4ca7a69b94ace73d1019c398f3fd93dfa0ebcc9b2396b56aaa191fc72e0'
+            'c74473fa30c3459a2f3fb1b8adf1053e22f8b577275964e5809c3e5fc4cd1b16'
             '4bd1bac2959b989af0dae573123b9aff7c609090537e94ee0ae05099cad977b8'
             '2826b320e5295d663ec3fdce62472419361fbb3a8b773554ca8819f0cc677ebc'
             '9fd6517e1ae736a884d8d80ce9651b8264d87a7b79b358826c2c3c06f234b6eb'
