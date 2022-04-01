@@ -56,8 +56,8 @@ done
 pkgver=5.17.1_rt17
 kernelversion=5.17.1
 rtversion=17
-pkgrel=1
 major=5.17
+pkgrel=1
 arch=(x86_64)
 url='https://www.kernel.org/'
 license=(GPL2)
