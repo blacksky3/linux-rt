@@ -4,7 +4,7 @@ Linux kernel build for Archlinux with Real-Time support, Arch, Block, CPU, CPU P
 
 # Version
 
-- 5.17.1-rt16
+- 5.17.1-rt17
 
 # Build
 
