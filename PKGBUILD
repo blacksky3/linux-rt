@@ -426,7 +426,7 @@ build(){
 _package(){
   pkgdesc='The Linux kernel and modules with Real-Time support, Arch, Block, CPU, CPU Power, Futex, Wine and kernel_compiler_patch patch'
   depends=(coreutils kmod initramfs)
-  optdepends=('crda: to set the correct wireless channels of your country'
+  optdepends=('wireless-regdb: to set the correct wireless channels of your country'
               'linux-firmware: firmware images needed for some devices')
   provides=(VIRTUALBOX-GUEST-MODULES WIREGUARD-MODULE)
 
