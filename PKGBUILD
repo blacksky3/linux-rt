@@ -53,10 +53,10 @@ for _p in "${pkgname[@]}"; do
     _package${_p#$pkgbase}
   }"
 done
-pkgver=5.17.1_rt17
-kernelversion=5.17.1
-rtversion=17
-major=5.17
+pkgver=5.18.0_rt10
+kernelversion=5.18
+rtversion=10
+major=5.18
 pkgrel=1
 arch=(x86_64)
 url='https://www.kernel.org/'
@@ -67,39 +67,34 @@ if [[ "$_compiler" = "2" ]]; then
 fi
 options=(!strip)
 
-archlinuxpath=https://raw.githubusercontent.com/archlinux/svntogit-packages/5a760e76311f5e8a9bb6c8fa69cc17d59e705322/trunk
+archlinuxpath=https://raw.githubusercontent.com/archlinux/svntogit-packages/1040c8b5898fd4bd16f089d6f7403493871d57ca/trunk
 patchpath=https://raw.githubusercontent.com/blacksky3/patches/main/$major
 
 source=(https://mirrors.edge.kernel.org/pub/linux/kernel/v5.x/linux-$kernelversion.tar.xz
         ${archlinuxpath}/config
         # RT patch
         ${patchpath}/rt/patch-$kernelversion-rt$rtversion.patch
+        # AMD patches
+        ${patchpath}/amd/0001-amd-patches-v1.patch
         # Arch patches
         ${patchpath}/arch/0001-ZEN-Add-sysctl-and-CONFIG-to-disallow-unprivileged-C.patch
-        ${patchpath}/arch/0001-random-treat-bootloader-trust-toggle-the-same-way-as.patch
-        ${patchpath}/arch/0002-Revert-swiotlb-rework-fix-info-leak-with-DMA_FROM_DE.patch
-        ${patchpath}/arch/0003-tick-Detect-and-fix-jiffies-update-stall.patch
-        ${patchpath}/arch/0004-tick-rcu-Remove-obsolete-rcu_needs_cpu-parameters.patch
-        ${patchpath}/arch/0005-tick-rcu-Stop-allowing-RCU_SOFTIRQ-in-idle.patch
-        ${patchpath}/arch/0006-lib-irq_poll-Declare-IRQ_POLL-softirq-vector-as-ksof.patch
         # Block patches. Set BFQ as default
         ${patchpath}/block/0001-block-Kconfig.iosched-set-default-value-of-IOSCHED_B.patch
         ${patchpath}/block/0002-block-Fix-depends-for-BLK_DEV_ZONED.patch
         ${patchpath}/block/0003-block-set-rq_affinity-2-for-full-multithreading-I-O.patch
         ${patchpath}/block/0002-LL-elevator-set-default-scheduler-to-bfq-for-blk-mq.patch
         ${patchpath}/block/0003-LL-elevator-always-use-bfq-unless-overridden-by-flag.patch
+        # BTRFS patches
+        ${patchpath}/btrfs/0001-btrfs-patches-v3.patch
         # CPU patches
         ${patchpath}/cpu/0002-init-Kconfig-enable-O3-for-all-arches.patch
         ${patchpath}/cpu/0004-Makefile-Turn-off-loop-vectorization-for-GCC-O3-opti.patch
-        # CPU Power patches
-        ${patchpath}/cpupower/0001-cpupower-update-for-Linux-5.18-rc1.patch
         # Futex
         ${patchpath}/futex/0001-futex-Add-entry-point-for-FUTEX_WAIT_MULTIPLE-opcode.patch
         # Wine
-        ${patchpath}/wine/0001-winesync-Introduce-the-winesync-driver-and-character.patch
+        ${patchpath}/wine/0007-v5.18-winesync-v3.patch
         # Graysky2 CPU patch
         https://raw.githubusercontent.com/graysky2/kernel_compiler_patch/master/more-uarches-for-kernel-5.17+.patch)
-
 
 export KBUILD_BUILD_HOST=archlinux
 export KBUILD_BUILD_USER=$pkgbase
@@ -363,7 +358,12 @@ prepare(){
 
   sleep 2s
 
-  msg2 "Enable winesync"
+  msg2 "Enable PERF_EVENTS_AMD_BRS"
+  scripts/config --enable CONFIG_PERF_EVENTS_AMD_BRS
+
+  sleep 2s
+
+  msg2 "Enable Winesync"
   scripts/config --enable CONFIG_WINESYNC
 
   sleep 2s
@@ -424,7 +424,7 @@ build(){
 }
 
 _package(){
-  pkgdesc='The Linux kernel and modules with Real-Time support, Arch, Block, CPU, CPU Power, Futex, Wine and kernel_compiler_patch patch'
+  pkgdesc='The Linux kernel and modules with Real-Time support, AMD, Arch, Block, CPU, BTRFS, Futex, Wine and kernel_compiler_patch patch'
   depends=(coreutils kmod initramfs)
   optdepends=('wireless-regdb: to set the correct wireless channels of your country'
               'linux-firmware: firmware images needed for some devices')
@@ -538,24 +538,19 @@ _package-headers(){
   ln -sr "$builddir" "$pkgdir/usr/src/$pkgbase"
 }
 
-sha256sums=('7cd5c5d432a25f45060868ce6a8578890e550158a2f779c4a20804b551e84c24'
-            '3bbdd34b664cb331616469d0900951a175392a1244d3cc6a3d1f30c432434460'
-            '995bfabe36205188c00159f5dba835169ff680b4716dce6113d9819ff1b9f67c'
+sha256sums=('51f3f1684a896e797182a0907299cc1f0ff5e5b51dd9a55478ae63a409855cee'
+            'fb37785c43d90085ab4e7d7cee522cb8232713b6c601d74cfc7234eeaeb1e6b5'
+            '9303ba50dd9d9256c1a8130d9581747ac9509d98cd1df1d2833c4e99c0a06861'
+            '9824cd3a41db040bf28d6538aa4805f869333139cbcf43e0422e1b42f5401270'
             '4bd1bac2959b989af0dae573123b9aff7c609090537e94ee0ae05099cad977b8'
-            '223455f2f6fbda9adc2a74d056bbc55006e0c78c3111453e2d253e56eaf7689e'
-            '5c17d0824a514e392f2d42689d29a5a8666e37c0a394faa18be87989b749b712'
-            '71cccbed658434bf0394fe91fb0738e661aef9f5a94dffda3c9918a315e825e4'
-            '99c0e2f6aac6a3f5f55fb1e4f3d36f2c9bb38163b2da45b3e43437d3fee4f050'
-            'a046b85754ed7582ec5876d06d3b971e418d079c40801f3e156bb353ef7b802c'
-            '40bde648ef07bc638571a3475e555919df8fd2bdfc5360a920e06178bbcdaf9b'
-            '4d385d6a7f7fd9f9aba19d5c24c24814e1af370ff245c8dc98b03482a27cb257'
-            'a043e4c393395e6ad50d35c973fa0952f5deb109aee8a23103e24297c027641e'
-            '3a02c7382d4d490e16a6132fcba89004f73044c34daf65906c1f823d2ab25aeb'
-            '6978a2010c3a2dd7bec1260e3f1e0f9d6ebc032664cdd917847f352e58ba2870'
-            'b5ff6f189a83472b737965e0412ca401af4bc539b308e0d9bfa403294e6795e0'
-            '74546291433f8e79c9c960075edbd7974d715818b1be6c982308adf93e9e9c4f'
-            '7bf85364c3876a648b542ba5a5ada801181183b29366408ef2b2971edab0bd4c'
-            '05715dd3a05812c3a1185ca6831c8bd38cee3352dab343717ed77b49b4b527c0'
-            '5f6906d9f8c1bd9b30486eba07f2c03ca1849cc5c6a990127ebd81c6e105ac45'
-            '7a7fb14b0e2bef1f1b7b0b3cd1870062db504fdf6510ca913231cf901d89e92e'
+            '9c0e1dea6f645eee9b09cf7d264b17f00f636bdda35c93d354562dda0d674005'
+            'ba63855b09eb27c4c33b4302560acec739e642ee8122d3c867b9f11deb06bc56'
+            'e4dd2216fc31d0eab68d674cbbce70343f920c5146613e97fe8c3afed3139157'
+            '7a7f9a4d66abe261f35373002e3556b8af7204d155896c2e6d1b55d74a31b5b8'
+            '3829e6f9dd55e5c0ae997d409b15c8784e7584a820c7aa0941d50ed6dffeab31'
+            'ada818c395255b5112c047208816f0234d9930428782d14915c83e2d197fa0ae'
+            'cd634fe619625b01584cd01534b23c2d4eca8146c9690205806b0db5d8029906'
+            '26fd09d627f83eb78ecd7e65356731d501b89fbc6cd339018aa1ccd708c4756f'
+            'd1939e9d71df2d1b3bd2c60c26e2f26246f4d8f2a93e131e4ee8d49ba7dfc74f'
+            '057631ecc148b41e0037d200a69cbbfbed8cdcf27eede3d8cd6936566b6ebc68'
             'dea86a521603414a8c7bf9cf1f41090d5d6f8035ce31407449e25964befb1e50')

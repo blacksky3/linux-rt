@@ -1,10 +1,10 @@
 # linux-rt
 
-Linux kernel build for Archlinux with Real-Time support, Arch, Block, CPU, CPU Power, Futex, Wine and kernel_compiler_patch patch.
+Linux kernel build for Archlinux with Real-Time support, AMD, Arch, Block, CPU, BTRFS, Futex, Wine and kernel_compiler_patch patch.
 
 # Version
 
-- 5.17.1-rt17
+- 5.18-rt10
 
 # Build
 
