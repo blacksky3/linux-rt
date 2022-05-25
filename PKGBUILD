@@ -53,9 +53,9 @@ for _p in "${pkgname[@]}"; do
     _package${_p#$pkgbase}
   }"
 done
-pkgver=5.18.0_rt10
+pkgver=5.18.0_rt11
 kernelversion=5.18
-rtversion=10
+rtversion=11
 major=5.18
 pkgrel=1
 arch=(x86_64)
@@ -540,7 +540,7 @@ _package-headers(){
 
 sha256sums=('51f3f1684a896e797182a0907299cc1f0ff5e5b51dd9a55478ae63a409855cee'
             '5088714ec20c9c5b063decbf2210f5b153a908a71678aa156f5f3e81394e9c38'
-            '9303ba50dd9d9256c1a8130d9581747ac9509d98cd1df1d2833c4e99c0a06861'
+            'cc959dae6b2f7ba88a721eb0114fd8b493620dde1c1a4a886761a1b63b0b69af'
             '9824cd3a41db040bf28d6538aa4805f869333139cbcf43e0422e1b42f5401270'
             '4bd1bac2959b989af0dae573123b9aff7c609090537e94ee0ae05099cad977b8'
             '9c0e1dea6f645eee9b09cf7d264b17f00f636bdda35c93d354562dda0d674005'

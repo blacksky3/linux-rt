@@ -4,7 +4,7 @@ Linux kernel build for Archlinux with Real-Time support, AMD, Arch, Block, CPU, 
 
 # Version
 
-- 5.18-rt10
+- 5.18-rt11
 
 # Build
 
