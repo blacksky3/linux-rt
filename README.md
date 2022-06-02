@@ -9,7 +9,7 @@ Linux kernel build for Archlinux with Real-Time support, AMD, Arch, Block, CPU, 
 # Build
 
     git clone https://github.com/blacksky3/linux-rt.git
-    cd linux-rt
+    cd linux-rt/5.18
     env_compiler=(1 or 2) makepkg -s
 
 # Build variables
